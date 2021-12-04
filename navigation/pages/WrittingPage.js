@@ -3,12 +3,14 @@ import {StyleSheet, View, Text, TextInput, Button, AppRegistry,Image,TouchableOp
 
 // page for writting note
 export default function WrittingPage({navigation}){
+    const current = new Date();
+    const date = `${current.getFullYear()}/${current.getMonth()+1}/${current.getDate()}`;
+    const time = `${current.getHours()}:${current.getMinutes()}`;
     return (
         // style for the page's view port
         <View style={{flex: 1, textAlign:'left', marginLeft:20}}>
-
             <TouchableOpacity 
-                onPress={()=>navigation.navigate('Home')}
+                onPress={()=>upLoad()}
                 style={styles.buttonRight}>
                 <Image
                     style={{height:50, width:50, marginBottom:10, marginTop:25}}
@@ -26,10 +28,10 @@ export default function WrittingPage({navigation}){
             </TouchableOpacity>
 
             <TextInput
-                style={{fontSize:26, fontWeight:'bold', color:'grey', textAlign:'left', marginTop:80}}
+                style={{fontSize:26, fontWeight:'bold', color:'grey', textAlign:'left', marginTop:80, marginLeft:10}}
                 placeholder="Title">
             </TextInput>
-
+            <Text style={{marginLeft:10}}> {date}    {time}</Text>
             <TextInput 
                 style={styles.input}
                 multiline={true}
@@ -40,8 +42,13 @@ export default function WrittingPage({navigation}){
     );
 }
 
+function upLoad(){
+alert("上传成功")
+}
+
 const styles = StyleSheet.create({
     input:{
+        backgroundColor:'#F7F7F7',
         textAlignVertical: 'top',
         textAlign:'left',
         borderWidth: 1,
@@ -49,7 +56,7 @@ const styles = StyleSheet.create({
         padding: 8,
         margin: 15,
         width: 350,
-        height: 500,
+        height: 450,
         fontSize:20, 
         fontWeight:'bold',
         /*use for fuzzy board of text-input*/
