@@ -6,7 +6,7 @@ export default function SettingPage({navigation}){
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
             <Text
                 onPress={()=>navigation.navigate('Home')}
-                style={{fontSize:26, fontWeight:'blod'}}>Setting Page</Text>
+                style={{fontSize:26, fontWeight:'bold'}}>Setting Page</Text>
         </View>
     );
 }
