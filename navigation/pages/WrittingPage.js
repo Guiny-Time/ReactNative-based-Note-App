@@ -1,11 +1,18 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, TextInput, Button, AppRegistry,Image,TouchableOpacity,Alert} from 'react-native';
+import {StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Alert} from 'react-native';
+
 
 // page for writting note
 export default function WrittingPage({navigation}){
+    // state hook
+    // last modify time
+    const [date, setDate] = useState();
+    const [content, setContent] = useState("");
     const current = new Date();
-    const date = `${current.getFullYear()}/${current.getMonth()+1}/${current.getDate()}`;
-    const time = `${current.getHours()}:${current.getMinutes()}`;
+    if(date == null){
+        setDate("You have not modified this note yet.");
+    }
+
     return (
         // style for the page's view port
         <View style={{flex: 1, textAlign:'left', marginLeft:20}}>
@@ -31,21 +38,49 @@ export default function WrittingPage({navigation}){
                 style={{fontSize:26, fontWeight:'bold', color:'grey', textAlign:'left', marginTop:80, marginLeft:10}}
                 placeholder="Title">
             </TextInput>
-            <Text style={{marginLeft:10}}> {date}    {time}</Text>
-            <TextInput 
-                style={styles.input}
-                multiline={true}
-                maxLength={300}>
-            </TextInput>
+
+            <DateReader />
       
         </View>
     );
 }
 
 function upLoad(){
-alert("上传成功")
+    alert("上传成功")
 }
 
+
+
+// component for the last notified date and text input for context
+const DateReader = (props) => {
+    const [date, setDate] = useState();
+    const current = new Date;
+
+    function ChangeDate(){
+        setDate("Last modified: "
+                +`${current.getFullYear()}/${current.getMonth()+1}/${current.getDate()}`
+                +"    " 
+                +`${current.getHours()}: ${current.getMinutes()}: ${current.getSeconds()}`);
+    }
+
+    if(date == null){
+        setDate("Type to start.")
+    }
+    return (
+        <View>
+            <Text style={{marginLeft:10}}>{date}</Text>
+            <TextInput 
+                style={styles.input}
+                multiline={true}
+                maxLength={300}
+                onEndEditing={()=>ChangeDate()}>
+            </TextInput>
+      </View>
+    );
+  }
+
+
+  // css part
 const styles = StyleSheet.create({
     input:{
         backgroundColor:'#F7F7F7',
