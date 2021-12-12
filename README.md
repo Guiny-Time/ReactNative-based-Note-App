@@ -9,4 +9,4 @@ nt（非常恼
 ## 已完成功能
 ### UI框架
 - 记录日志
-<img src="https://raw.githubusercontent.com/Guiny-Time/PictureBed/main/20211205020425.png"/>
+<img src="https://raw.githubusercontent.com/Guiny-Time/PictureBed/main/20211205155416.png" style="height:50"/>
