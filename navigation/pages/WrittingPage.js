@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Alert} from 'react-native';
+import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Alert} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 // page for writting note
@@ -9,6 +10,7 @@ export default function WrittingPage({navigation}){
     const [date, setDate] = useState();
     const [content, setContent] = useState("");
     const current = new Date();
+
     if(date == null){
         setDate("You have not modified this note yet.");
     }
@@ -17,7 +19,7 @@ export default function WrittingPage({navigation}){
         // style for the page's view port
         <View style={{flex: 1, textAlign:'left', marginLeft:20}}>
             <TouchableOpacity 
-                onPress={()=>upLoad()}
+                onPress={ () => getData() }
                 style={styles.buttonRight}>
                 <Image
                     style={{height:50, width:50, marginBottom:10, marginTop:25}}
@@ -49,7 +51,27 @@ function upLoad(){
     alert("上传成功")
 }
 
+// 存储数据
+const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem('@storage_Key', value)
+      alert('写入成功')
+    } catch (e) {
+      console.log(e.message)
+    }
+  }
 
+  // 读取数据
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@storage_Key')
+      if(value !== null) {
+        alert(value)
+      }
+    } catch(e) {
+      console.log(e.message)
+    }
+  }
 
 // component for the last notified date and text input for context
 const DateReader = (props) => {

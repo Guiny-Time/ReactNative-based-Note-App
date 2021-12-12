@@ -6,7 +6,7 @@ export default function HomePage(){
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
             <Text
                 onPress={()=>alert('This is home page')}
-                style={{fontSize:26, fontWeight:'blod'}}>Home Page</Text>
+                style={{fontSize:26, fontWeight:'bold'}}>Home Page</Text>
         </View>
     );
 }
