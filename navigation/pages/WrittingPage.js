@@ -4,22 +4,43 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 // page for writting note
-export default function WrittingPage({navigation}){
+export default function WrittingPage({navigation}) {
     // state hook
     // last modify time
     const [date, setDate] = useState();
     const [content, setContent] = useState("");
     const current = new Date();
 
+    // 设置最后更改的日期
+    function SetDate(newDate){
+        if(newDate == "You have not modified this note yet."){
+            return
+        }else{
+            setDate(newDate)
+        }
+    }
+
+    // 设置更改的内容文本
+    function SetContent(newCont){
+        if(newCont == ''){
+            return
+        }else{
+            setContent(newCont)
+            alert(content)
+        }
+    }
+    
+
     if(date == null){
         setDate("You have not modified this note yet.");
     }
+
 
     return (
         // style for the page's view port
         <View style={{flex: 1, textAlign:'left', marginLeft:20}}>
             <TouchableOpacity 
-                onPress={ () => getData() }
+                onPress={ () => storeData(date, content) }
                 style={styles.buttonRight}>
                 <Image
                     style={{height:50, width:50, marginBottom:10, marginTop:25}}
@@ -41,53 +62,65 @@ export default function WrittingPage({navigation}){
                 placeholder="Title">
             </TextInput>
 
-            <DateReader />
+            <DateReader _setDate = {SetDate} _setContent={SetContent}/>
       
         </View>
     );
 }
 
-function upLoad(){
-    alert("上传成功")
-}
 
-// 存储数据
-const storeData = async (value) => {
-    try {
-      await AsyncStorage.setItem('@storage_Key', value)
-      alert('写入成功')
-    } catch (e) {
-      console.log(e.message)
+// 以键值对的形式存储数据
+const storeData = async (key, value) => {
+    if(key == undefined || value == ''){
+        alert('You have not write anything yet! key: ' + key + 'value: ' + value)
+    }else{
+        try {
+            await AsyncStorage.setItem(key, value)
+            alert('写入成功! key: ' + key + 'value: ' + value)
+        } catch (e) {
+            console.log(e.message)
+        }
     }
   }
 
-  // 读取数据
-  const getData = async () => {
+  // 以键值对的形式读取数据
+  const getData = async (key) => {
     try {
-      const value = await AsyncStorage.getItem('@storage_Key')
+      const value = await AsyncStorage.getItem(key)
       if(value !== null) {
         alert(value)
+      }else{
+          alert('数据丢失')
       }
     } catch(e) {
       console.log(e.message)
     }
   }
 
-// component for the last notified date and text input for context
-const DateReader = (props) => {
+// 记录最后一次编辑时间以及输入文本框的**函数式组件**
+const DateReader = ({_setDate, _setContent}) => {
     const [date, setDate] = useState();
     const current = new Date;
 
     function ChangeDate(){
         setDate("Last modified: "
-                +`${current.getFullYear()}/${current.getMonth()+1}/${current.getDate()}`
-                +"    " 
-                +`${current.getHours()}: ${current.getMinutes()}: ${current.getSeconds()}`);
+            +`${current.getFullYear()}/${current.getMonth()+1}/${current.getDate()}`
+            +"    " 
+            +`${current.getHours()}: ${current.getMinutes()}: ${current.getSeconds()}`
+        );
+        _setDate(`${current.getFullYear()}/${current.getMonth()+1}/${current.getDate()}`
+            +`${current.getHours()}: ${current.getMinutes()}: ${current.getSeconds()}`
+        );
+    }
+
+    function onChangeText(text){
+        _setContent(text);
     }
 
     if(date == null){
         setDate("Type to start.")
     }
+
     return (
         <View>
             <Text style={{marginLeft:10}}>{date}</Text>
@@ -95,12 +128,13 @@ const DateReader = (props) => {
                 style={styles.input}
                 multiline={true}
                 maxLength={300}
-                onEndEditing={()=>ChangeDate()}>
+                onChangeText={text => {onChangeText(text); ChangeDate()}}
+                placeholder='Write anything you like.'
+                >
             </TextInput>
       </View>
     );
   }
-
 
   // css part
 const styles = StyleSheet.create({
