@@ -89,15 +89,18 @@ const ImportData = ({_SetKeys,flag,_SetFlag})=>{
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#EEF2F6',
     marginTop: StatusBar.currentHeight || 0,
   },
   item: {
-    backgroundColor: '#f9c2ff',
+    backgroundColor: '#fff',
+    borderRadius: 25,
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
+
   },
   title: {
-    fontSize: 32,
+    fontSize: 30,
   },
 });
