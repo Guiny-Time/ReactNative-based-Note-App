@@ -10,14 +10,21 @@ const wait = (timeout) => {
     return (
       <View style={styles.item}>
         <Text style={styles.title}>{title}</Text>
+        <Text style={styles.contents}>我是内容</Text>
       </View>
     );
   }
 
 export default function HomePage(){
+    // 控制刷新获取的bool值
     const [flag, setFlag] = useState();
+    // 键元素列表
     const [keysElm, setKeysElm] = useState([]);
+    // 是否刷新获取
     const [refreshing, setRefreshing] = React.useState(false);
+    // 总日记数
+    const [count,setCount] = useState(0)
+
     const onRefresh = React.useCallback(() => {
       setRefreshing(true);
       setFlag(true)
@@ -40,8 +47,8 @@ export default function HomePage(){
       return (
         
         <SafeAreaView style={styles.container}>
-
-          <ImportData _SetKeys={setKeys} flag={flag} _SetFlag={setFlag} />
+          <Text style={{marginHorizontal:20,marginTop:-15,color:'#666666'}}>{count} notes.上拉刷新</Text>
+          <ImportData _SetKeys={setKeys} flag={flag} _SetFlag={setFlag} _SetCount={setCount} />
           <FlatList
             data={keysElm}
             renderItem={renderItem}
@@ -54,19 +61,24 @@ export default function HomePage(){
       );
 }
 
-const ImportData = ({_SetKeys,flag,_SetFlag})=>{
+const ImportData = ({_SetKeys,flag,_SetFlag,_SetCount})=>{
   const [localFlag, setFlag] = useState(false);
   var dataBack = {}
   var trueData = []
   console.log("window flag from home page: " + flag)
-
+  var count = 0;
   AsyncStorage.getAllKeys()
     .then((keys)=> AsyncStorage.multiGet(keys)
       .then((data) => {
         for(var i = 0;i<data.length;i++){
-          dataBack = {'id':data[i][0],'title':data[i][1]}
-          trueData[i] = dataBack
+          if(data[i][1].length == 4){
+            dataBack = {'id':data[i][0],'title':data[i][1]}
+            trueData[count] = dataBack
+            count++
+          }
         }
+        _SetCount(count)
+        count = 0
         // 有数据传来，需要更新
         if(flag){
           setFlag(false)
@@ -80,7 +92,6 @@ const ImportData = ({_SetKeys,flag,_SetFlag})=>{
         }
       }));
 
-        // _SetKeys(trueData)
         return(
           <View></View>
         );
@@ -102,5 +113,9 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 30,
+    marginBottom:20
+  },
+  contents:{
+    fontSize: 20,
   },
 });

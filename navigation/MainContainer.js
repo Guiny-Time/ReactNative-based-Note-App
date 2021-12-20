@@ -9,7 +9,7 @@ import HomePage from './pages/HomePage'
 import SettingPage from './pages/SettingPage'
 import WrittingPage from './pages/WrittingPage'
 
-const homeName = "Notes";
+const homeName = "All Notes";
 const settingName = "Setting";
 const writtingName = "Writting";
 
