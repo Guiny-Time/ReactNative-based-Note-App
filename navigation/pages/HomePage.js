@@ -1,22 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, DeviceEventEmitter, Vibration, RefreshControl} from 'react-native';
+import React, {useState} from 'react';
+import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, RefreshControl} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const wait = (timeout) => {
   return new Promise(resolve => {
     setTimeout(resolve, timeout);
   });
 }
-  const Item = ({ title, content, date }) => {
-    return (
-      <View style={styles.item}>
-        <Text numberOfLines={1} style={styles.title}>{title}</Text>
-        <Text style={styles.date}>{date}</Text>
-        <Text numberOfLines={1} style={styles.contents}>{content}</Text>
-      </View>
-    );
-  }
 
-export default function HomePage(){
+
+export default function HomePage({navigation}){
     // 控制刷新获取的bool值
     const [flag, setFlag] = useState();
     // 键元素列表
@@ -42,7 +34,7 @@ export default function HomePage(){
     
 
     const renderItem = ({ item }) => (
-        <Item title={item.title} content={item.content} date={item.date} />
+        <Item title={item.title} content={item.content} date={item.date} navigation={navigation}/>
       );
     
       return (
@@ -60,6 +52,20 @@ export default function HomePage(){
           />
         </SafeAreaView>
       );
+}
+
+
+const Item = ({ title, content, date, navigation }) => {
+  return (
+    <View style={styles.item}>
+      <Text numberOfLines={1} style={styles.title} onPress={() => {
+        // 显示弹窗
+        navigation.navigate('Writting')
+    }}>{title}</Text>
+      <Text style={styles.date}>{date}</Text>
+      <Text numberOfLines={1} style={styles.contents}>{content}</Text>
+    </View>
+  );
 }
 
 const ImportData = ({_SetKeys,flag,_SetFlag,_SetCount})=>{

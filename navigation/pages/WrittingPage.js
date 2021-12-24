@@ -1,14 +1,15 @@
 import React, {useState} from 'react';
 import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Alert, DeviceEventEmitter, Vibration} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { clear } from 'react-native/Libraries/LogBox/Data/LogBoxData';
 
 // page for writting note
 export default function WrittingPage({navigation}) {
     // state hook
+    // 文本状态设置
     const [date, setDate] = useState("");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+    // 创建时间，作为记录token的键
     const [id, SetID] = useState("")
 
     const createTime = new Date();
@@ -23,9 +24,9 @@ export default function WrittingPage({navigation}) {
         "title": title,
         "date": date,
         "content": content
-      };
+    };
       // 生成随机字符串
-      function randomToken(e) {
+    function randomToken(e) {
         // 模拟随机字符串库
         var t = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz0123456789'
         var a = t.length
@@ -36,56 +37,13 @@ export default function WrittingPage({navigation}) {
         }
         // 返回随机组合字符串
         return n
-      }
-
-    // 设置最后更改的日期
-    function SetDate(newDate){
-        if(newDate == "You have not modified this note yet."){
-            return
-        }else{
-            setDate(newDate)
-        }
-        note_object = {
-            title: title,
-            date: date,
-            content: content
-          };
-    }
-
-    // 设置更改的内容文本
-    function SetContent(newCont){
-        if(newCont == ''){
-            return
-        }else{
-            setContent(newCont)
-        }
-        note_object = {
-            // 赋值id作为日志的唯一key，若不存在则赋初始值0
-            title: title,
-            date: date,
-            content: content
-          };
-    }
-    
-    // 设置标题
-    function SetTitle(newTitle){
-        if(newTitle == ''){
-            return
-        }else{
-            setTitle(newTitle)
-        }
-        note_object = {
-            title: title,
-            date: date,
-            content: content
-          };
     }
 
     // 清理内容（在提交完之后）
     function ClearEverything(){
         SetID("")
-        setContent("")
         setDate("")
+        setContent("")
         setTitle("")
         note_object = {
             title: title,
@@ -93,20 +51,25 @@ export default function WrittingPage({navigation}) {
             content: content
         };
     }
+    function ChangeDate(){
+        setDate("Last modified: "
+            +`${createTime.getFullYear()}/${createTime.getMonth()+1}/${createTime.getDate()}`
+            +"  " 
+            +`${createTime.getHours()}: ${createTime.getMinutes()}: ${createTime.getSeconds()}`
+        );
+    }
 
-    if(date == null){
+    if(date == ''){
         setDate("You have not modified this note yet.");
     }
 
-
     return (
-        <View style={{flex: 1, textAlign:'left', marginLeft:20}}>
-            <Text>创建时间: {id}</Text>
+        <View style={{flex: 1, textAlign:'left', marginLeft:20, backgroundColor:'#EEF2F6'}}>
             <TouchableOpacity 
                 onPress={ () =>{
                     // 提交日志
                     if(note_object.title == '' || note_object.content == '' || note_object.date == ''){
-                        alert("你有东西还没写哦")
+                        alert("Oops. You are missing to write something. Maybe title?")
                     }else{
                         // 随机生成4位token
                         let token = randomToken(4)
@@ -129,7 +92,7 @@ export default function WrittingPage({navigation}) {
             <TouchableOpacity 
                 onPress={()=>{
                     alert('如果你没有保存，你的更改可能会丢失')
-                    navigation.navigate('Home')
+                    navigation.navigate('All Notes')
 
                 }}
                 style={styles.buttonLeft}>
@@ -141,11 +104,21 @@ export default function WrittingPage({navigation}) {
 
             <TextInput
                 style={{fontSize:26, fontWeight:'bold', color:'grey', textAlign:'left', marginTop:80, marginLeft:10}}
-                onChangeText={text=>{SetTitle(text)}}
-                placeholder="Title">
+                onChangeText={text=>{setTitle(text);}}
+                placeholder="Title"
+                value={title}>
             </TextInput>
 
-            <DateReader _setDate = {SetDate} _setContent={SetContent}/>
+            <Text style={{marginLeft:10}}>{date}</Text>
+            <TextInput 
+                style={styles.input}
+                multiline={true}
+                maxLength={300}
+                onChangeText={text => {setContent(text);ChangeDate()}}
+                placeholder='Write anything you like.'
+                value={content}
+                >
+            </TextInput>
       
         </View>
     );
@@ -201,50 +174,10 @@ const setJSONData = async (key, value) => {
       return jsonValue;
     });
   }
-
-// 记录最后一次编辑时间以及输入文本框的**函数式组件**
-const DateReader = ({_setDate, _setContent, clear}) => {
-    const [date, setDate] = useState();
-    const current = new Date;
-
-    function ChangeDate(){
-        setDate("Last modified: "
-            +`${current.getFullYear()}/${current.getMonth()+1}/${current.getDate()}`
-            +"    " 
-            +`${current.getHours()}: ${current.getMinutes()}: ${current.getSeconds()}`
-        );
-        _setDate(`${current.getFullYear()}/${current.getMonth()+1}/${current.getDate()}`
-            + "   " + `${current.getHours()}: ${current.getMinutes()}: ${current.getSeconds()}`
-        );
-    }
-
-    function onChangeText(text){
-        _setContent(text);
-    }
-
-    if(date == null){
-        setDate("Type to start.")
-    }
-
-    return (
-        <View>
-            <Text style={{marginLeft:10}}>{date}</Text>
-            <TextInput 
-                style={styles.input}
-                multiline={true}
-                maxLength={300}
-                onChangeText={text => {onChangeText(text); ChangeDate()}}
-                placeholder='Write anything you like.'
-                >
-            </TextInput>
-      </View>
-    );
-  }
-
   // css part
 const styles = StyleSheet.create({
     input:{
-        backgroundColor:'#F7F7F7',
+        backgroundColor:'#fff',
         textAlignVertical: 'top',
         textAlign:'left',
         borderWidth: 1,
