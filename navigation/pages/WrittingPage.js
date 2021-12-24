@@ -81,7 +81,6 @@ export default function WrittingPage({navigation}) {
           };
     }
 
-
     // 清理内容（在提交完之后）
     function ClearEverything(){
         SetID("")
@@ -215,7 +214,7 @@ const DateReader = ({_setDate, _setContent, clear}) => {
             +`${current.getHours()}: ${current.getMinutes()}: ${current.getSeconds()}`
         );
         _setDate(`${current.getFullYear()}/${current.getMonth()+1}/${current.getDate()}`
-            +`${current.getHours()}: ${current.getMinutes()}: ${current.getSeconds()}`
+            + "   " + `${current.getHours()}: ${current.getMinutes()}: ${current.getSeconds()}`
         );
     }
 

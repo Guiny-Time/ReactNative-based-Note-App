@@ -6,11 +6,12 @@ const wait = (timeout) => {
     setTimeout(resolve, timeout);
   });
 }
-  const Item = ({ title }) => {
+  const Item = ({ title, content, date }) => {
     return (
       <View style={styles.item}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.contents}>我是内容</Text>
+        <Text numberOfLines={1} style={styles.title}>{title}</Text>
+        <Text style={styles.date}>{date}</Text>
+        <Text numberOfLines={1} style={styles.contents}>{content}</Text>
       </View>
     );
   }
@@ -41,13 +42,13 @@ export default function HomePage(){
     
 
     const renderItem = ({ item }) => (
-        <Item title={item.title} />
+        <Item title={item.title} content={item.content} date={item.date} />
       );
     
       return (
         
         <SafeAreaView style={styles.container}>
-          <Text style={{marginHorizontal:20,marginTop:-15,color:'#666666'}}>{count} notes.上拉刷新</Text>
+          <Text style={{marginHorizontal:20,marginTop:-15,color:'#666666'}}>Total: {count} notes. 上拉刷新</Text>
           <ImportData _SetKeys={setKeys} flag={flag} _SetFlag={setFlag} _SetCount={setCount} />
           <FlatList
             data={keysElm}
@@ -73,10 +74,10 @@ const ImportData = ({_SetKeys,flag,_SetFlag,_SetCount})=>{
     .then((keys)=> AsyncStorage.multiGet(keys)
       .then((data) => {
         for(var i = 0; i < data.length; i++){
-          // const jsonValue = JSON.parse(data[i]);
           if(data[i][0].length == 4){
+            const jsonValue = JSON.parse(data[i][1]);
             // console.log(data[i][0])
-            dataBack = {'id':data[i][0],'title':data[i][1]}
+            dataBack = {'id':data[i][0],'title':jsonValue.title, 'content':jsonValue.content, 'date':jsonValue.date}
             trueData[count] = dataBack
             count++
           }
@@ -113,13 +114,19 @@ const styles = StyleSheet.create({
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
-
+    maxHeight:160,
+    overflow:'hidden',
+    
   },
   title: {
-    fontSize: 30,
-    marginBottom:20
+    fontSize: 30
+  },
+  date: {
+    color: '#9B9B9B',
+    marginLeft: 5
   },
   contents:{
     fontSize: 20,
+    margin: 5
   },
 });
