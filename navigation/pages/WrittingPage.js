@@ -106,12 +106,18 @@ export default function WrittingPage({navigation}) {
             <TouchableOpacity 
                 onPress={ () =>{
                     // 提交日志
-                    // 针对该笔记的唯一随机token
-                    setID(id,randomToken(4))
-                    let token = readID(id)
-                    setJSONData(token,note_object)
-                    navigation.navigate('Home')
-                    ClearEverything()
+                    if(note_object.title == '' || note_object.content == '' || note_object.date == ''){
+                        alert("你有东西还没写哦")
+                    }else{
+                        // 随机生成4位token
+                        let token = randomToken(4)
+                        // 设置笔记token
+                        setID(id, token)
+                        // 设置token对应的内容
+                        setJSONData(token, note_object)
+                        ClearEverything()
+                        navigation.navigate('All Notes')
+                    }
                     
                 }}
                 style={styles.buttonRight}>
@@ -170,18 +176,19 @@ const setID = async (key, value) => {
   }
 // 储存JSON格式数据
 const setJSONData = async (key, value) => {
+    // 这里的key作为本日记的token
     console.log(JSON.stringify(value))
     if(key == undefined){
         // 笔记初始id未定义
-        alert('You do not have note id now: ' + key)
+        console.log('You do not have note token now: ' + key)
     }else if(value == ''){
         // 没写东西
-        alert('You did not write anything: ' + value)
+        alert('You did not write anything yet.')
     }else{
         // 写入存储
         try {
             // value是一个JSON，包含了：最后修改时间、标题、内容文本
-            // AsyncStorage.setItem(key, JSON.stringify(value));
+            AsyncStorage.setItem(key, JSON.stringify(value));
             alert('写入成功! key: ' + key + 'value: ' + value)
         } catch (e) {
             console.log(e.message)

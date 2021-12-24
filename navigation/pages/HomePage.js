@@ -67,11 +67,15 @@ const ImportData = ({_SetKeys,flag,_SetFlag,_SetCount})=>{
   var trueData = []
   console.log("window flag from home page: " + flag)
   var count = 0;
+  // var token = await AsyncStorage.getAllKeys();
+  // var someItems = token.filter(tokenID => tokenID.length==4);
   AsyncStorage.getAllKeys()
     .then((keys)=> AsyncStorage.multiGet(keys)
       .then((data) => {
-        for(var i = 0;i<data.length;i++){
-          if(data[i][1].length == 4){
+        for(var i = 0; i < data.length; i++){
+          // const jsonValue = JSON.parse(data[i]);
+          if(data[i][0].length == 4){
+            // console.log(data[i][0])
             dataBack = {'id':data[i][0],'title':data[i][1]}
             trueData[count] = dataBack
             count++
