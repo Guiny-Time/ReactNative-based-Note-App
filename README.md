@@ -21,17 +21,21 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;基本功能很完善，想要更多操作需要魔改（我没有改）的导航栏
 
 # 已完成功能
-### 记录日志
-你可以在这个界面键入日志的标题和文本。系统会标注最后修改时间
+## 记录日志
+你可以在这个界面键入日志的标题和文本。系统会标注最后修改时间。如果没有输入标题或者内容会被打回来
 
-<img src="https://raw.githubusercontent.com/Guiny-Time/PictureBed/main/20211205155416.png" style="height:50"/>
+<img src="https://raw.githubusercontent.com/Guiny-Time/PictureBed/main/20211225224717.png"/><img src="https://raw.githubusercontent.com/Guiny-Time/PictureBed/main/20211225224640.png"/>
 <br>
 
-### 查看日志
+## 查看日志列表
 在这个界面可以查看已经发布的日志。每次发布完需要手动上滑刷新获取更新
 
-<img src="https://raw.githubusercontent.com/Guiny-Time/PictureBed/main/20211224220256.png"/>
+<img src="https://raw.githubusercontent.com/Guiny-Time/PictureBed/main/20211225224538.png"/>
 <br>
 
-# 未完成功能
-- 日志收藏
+## 修改日志
+在这个界面可以具体的查看某一篇日志，同时可以修改本篇日志的内容并保存
+
+<img src="https://raw.githubusercontent.com/Guiny-Time/PictureBed/main/20211225224457.png"/>
+<br>
+
