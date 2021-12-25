@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, RefreshControl} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const wait = (timeout) => {
   return new Promise(resolve => {
     setTimeout(resolve, timeout);
@@ -36,9 +37,8 @@ export default function HomePage({navigation}){
       return a.replace('/')>b.replace('/')
     }
     
-
     const renderItem = ({ item }) => (
-        <Item title={item.title} content={item.content} date={item.date} navigation={navigation}/>
+        <Item id={item.id} title={item.title} content={item.content} date={item.date} navigation={navigation}/>
       );
     
       return (
@@ -60,11 +60,12 @@ export default function HomePage({navigation}){
 }
 
 
-const Item = ({ title, content, date, navigation }) => {
+const Item = ({ id, title, content, date, navigation }) => {
   return (
     <View style={styles.item}>
       <Text numberOfLines={1} style={styles.title} onPress={() => {
-        // 显示弹窗
+        // 跳转并储存当前打开的日记信息
+        storeData({id}.id)
         navigation.navigate('Reading')
       }}>{title}</Text>
       <Text style={styles.date}>{date}</Text>
@@ -73,11 +74,12 @@ const Item = ({ title, content, date, navigation }) => {
   );
 }
 
-const ImportData = ({_SetKeys,flag,_SetFlag,_SetCount})=>{
+
+const ImportData = ({_SetKeys, flag, _SetFlag, _SetCount})=>{
   const [localFlag, setFlag] = useState(false);
   var dataBack = {}
   var trueData = []
-  console.log("window flag from home page: " + flag)
+  console.log("flag from home page: " + flag)
   var count = 0;
   // var token = await AsyncStorage.getAllKeys();
   // var someItems = token.filter(tokenID => tokenID.length==4);
@@ -111,6 +113,15 @@ const ImportData = ({_SetKeys,flag,_SetFlag,_SetCount})=>{
         return(
           <View></View>
         );
+}
+
+const storeData = async (value) => {
+  try {
+    await AsyncStorage.setItem('@storage_Note', value)
+    console.log('写入当前打开日志成功:' + value)
+  } catch (e) {
+    console.log(e.message)
+  }
 }
 
 const styles = StyleSheet.create({

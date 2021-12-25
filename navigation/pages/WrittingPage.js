@@ -77,7 +77,7 @@ export default function WrittingPage({navigation}) {
                 <Image
                     style={{height:50, width:50, marginBottom:10, marginTop:25}}
                     underlayColor='white'
-                    source={require('./img/ok.png')}/>
+                    source={require('../../assets/ok.png')}/>
             </TouchableOpacity>
 
             <TouchableOpacity 
@@ -88,7 +88,7 @@ export default function WrittingPage({navigation}) {
                 <Image
                     style={{height:40, width:40, marginBottom:10, marginTop:25, right:0}}
                     underlayColor='white'
-                    source={require('./img/Back.png')}/>
+                    source={require('../../assets/Back.png')}/>
             </TouchableOpacity>
 
             <TextInput

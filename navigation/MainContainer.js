@@ -40,7 +40,7 @@ export default function MainContainer(){
 
                 <Tab.Screen name={homeName} component={HomePage} options={{refresh: true}} />
                 <Tab.Screen name={writtingName} component={WrittingPage} options={{ headerShown: false, tabBarVisible:false }}/>
-                <Tab.Screen name={settingName} component={SettingPage}/>
+                <Tab.Screen name={settingName} component={SettingPage} options={{ headerShown: false, tabBarVisible:false }}/>
             </Tab.Navigator>
         </NavigationContainer>
     );
