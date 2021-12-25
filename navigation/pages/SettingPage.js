@@ -97,7 +97,7 @@ export default function SettingPage({navigation}){
 
             <TouchableOpacity 
                 onPress={()=>{
-                    navigation.navigate('All Notes',{callBack:()=>{setDate('')}})}}
+                    navigation.navigate('All Notes')}}
                 style={styles.buttonLeft}>
                 <Image
                     style={{height:40, width:40, marginBottom:10, marginTop:25, right:0}}

@@ -92,7 +92,7 @@ export default function WrittingPage({navigation}) {
             </TouchableOpacity>
 
             <TextInput
-                style={ {fontSize:26, fontWeight:'bold', color:'grey', textAlign:'left', marginTop:80, marginLeft:10} }
+                style={ styles.inputTitle }
                 onChangeText={ text => {setTitle(text);} }
                 placeholder="Title"
                 value={title}>
@@ -120,20 +120,7 @@ const setID = async (key, value) => {
         console.log(e.message)
       }
   }
-// 读取ID
-  const readID = async(key) => {
-    console.log('读取')
-    try {
-        const value = await AsyncStorage.getItem(key)
-        if(value != null) {
-            console.log('token值为: ' + value)
-        }else{
-            console.log('你读取的token啥也没有，估计出问题了')
-        }
-      } catch(e) {
-        console.log(e.message)
-      }
-  }
+
 // 储存JSON格式数据
 const setJSONData = async (key, value) => {
     // 这里的key作为本日记的token
@@ -155,15 +142,17 @@ const setJSONData = async (key, value) => {
         }
     }
   }
-  // 读取JSON数据
-  const getJSONData = async(key) => {
-    return AsyncStorage.getItem(key).then((value) => {
-      const jsonValue = JSON.parse(value);
-      return jsonValue;
-    });
-  }
+
   // css part
 const styles = StyleSheet.create({
+    inputTitle:{
+        fontSize:26, 
+        fontWeight:'bold', 
+        color:'grey', 
+        textAlign:'left', 
+        marginTop:80, 
+        marginLeft:10
+    },
     input:{
         backgroundColor:'#fff',
         textAlignVertical: 'top',

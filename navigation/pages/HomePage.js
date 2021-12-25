@@ -68,8 +68,16 @@ const Item = ({ id, title, content, date, navigation }) => {
         storeData({id}.id)
         navigation.navigate('Reading',{callBack:()=>{setFlag(true)}})
       }}>{title}</Text>
-      <Text style={styles.date}>{date}</Text>
-      <Text numberOfLines={1} style={styles.contents}>{content}</Text>
+      <Text style={styles.date} onPress={() => {
+        // 跳转并储存当前打开的日记信息
+        storeData({id}.id)
+        navigation.navigate('Reading',{callBack:()=>{setFlag(true)}})
+      }}>{date}</Text>
+      <Text numberOfLines={1} style={styles.contents} onPress={() => {
+        // 跳转并储存当前打开的日记信息
+        storeData({id}.id)
+        navigation.navigate('Reading',{callBack:()=>{setFlag(true)}})
+      }}>{content}</Text>
     </View>
   );
 }
