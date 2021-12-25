@@ -71,7 +71,7 @@ export default function WrittingPage({navigation}) {
                         // 设置token对应的内容
                         setJSONData(token, note_object)
                         ClearEverything()
-                        navigation.navigate('All Notes')
+                        navigation.navigate('All Notes',{callBack:()=>{setContent("")}})
                     }}}
                 style={styles.buttonRight}>
                 <Image

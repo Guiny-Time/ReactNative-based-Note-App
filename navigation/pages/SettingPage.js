@@ -27,6 +27,25 @@ export default function SettingPage({navigation}){
     }
 
     if(window){
+        setDate('!')
+        try {
+            AsyncStorage.getItem('@storage_Note')
+            .then((token)=>{
+                console.log(token[6])
+                AsyncStorage.getItem(token)
+                .then((value)=>{
+                    const jsonValue = JSON.parse(value);
+                    console.log(jsonValue)
+                    setToken(token)
+                    setTitle(jsonValue.title)
+                    setContent(jsonValue.content)
+                    setDate(jsonValue.date)
+                })
+            })
+                // 
+        } catch(e) {
+            console.log(e.message)
+        }
         return (
             <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor:'#EEF2F6'}}>
                 <ReadID _setTitle={setTitle} _setContent={setContent} _setDate={setDate} _setToken={setToken} />
@@ -42,7 +61,19 @@ export default function SettingPage({navigation}){
             </View>
         );
     }else{
-        
+        AsyncStorage.getItem('@storage_Note')
+            .then((token)=>{
+                console.log(token[6])
+                AsyncStorage.getItem(token)
+                .then((value)=>{
+                    const jsonValue = JSON.parse(value);
+                    console.log(jsonValue)
+                    setToken(token)
+                    setTitle(jsonValue.title)
+                    setContent(jsonValue.content)
+                    setDate(jsonValue.date)
+                })
+            })
         return (
             <View style={{flex: 1, textAlign:'left', marginLeft:20, backgroundColor:'#EEF2F6'}}>
             <ReadID _setTitle={setTitle} _setContent={setContent} _setDate={setDate} _setToken={setToken} />
@@ -65,7 +96,6 @@ export default function SettingPage({navigation}){
 
             <TouchableOpacity 
                 onPress={()=>{
-                    alert('If you did not submit your new note, your changes may loose.')
                     navigation.navigate('All Notes')}}
                 style={styles.buttonLeft}>
                 <Image

@@ -66,7 +66,7 @@ const Item = ({ id, title, content, date, navigation }) => {
       <Text numberOfLines={1} style={styles.title} onPress={() => {
         // 跳转并储存当前打开的日记信息
         storeData({id}.id)
-        navigation.navigate('Reading')
+        navigation.navigate('Reading',{callBack:()=>{setFlag(true)}})
       }}>{title}</Text>
       <Text style={styles.date}>{date}</Text>
       <Text numberOfLines={1} style={styles.contents}>{content}</Text>
