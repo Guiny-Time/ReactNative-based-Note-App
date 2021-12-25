@@ -10,7 +10,7 @@ import SettingPage from './pages/SettingPage'
 import WrittingPage from './pages/WrittingPage'
 
 const homeName = "All Notes";
-const settingName = "Setting";
+const settingName = "Reading";
 const writtingName = "Writting";
 
 const Tab = createBottomTabNavigator();
@@ -29,7 +29,7 @@ export default function MainContainer(){
                     if(rn === homeName) {
                         iconName=focused ? 'list' : 'list-outline'
                     }else if(rn === settingName) {
-                        iconName=focused ? 'settings' : 'settings-outline'
+                        iconName=focused ? 'book' : 'book-outline'
                     }else if(rn === writtingName){
                         iconName=focused ? 'add' : 'add-outline'
                     }

@@ -31,6 +31,10 @@ export default function HomePage({navigation}){
     function setKeys(value){
       setKeysElm(value)
     }
+    // compare function
+    function localCompare(a, b){
+      return a.replace('/')>b.replace('/')
+    }
     
 
     const renderItem = ({ item }) => (
@@ -43,9 +47,10 @@ export default function HomePage({navigation}){
           <Text style={{marginHorizontal:20,marginTop:-15,color:'#666666'}}>Total: {count} notes. 上拉刷新</Text>
           <ImportData _SetKeys={setKeys} flag={flag} _SetFlag={setFlag} _SetCount={setCount} />
           <FlatList
-            data={keysElm}
+            data={keysElm.sort((a, b)=> localCompare(a.date,b.date))}
             renderItem={renderItem}
             keyExtractor={item => item.id}
+            extraData={refreshing}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
@@ -60,8 +65,8 @@ const Item = ({ title, content, date, navigation }) => {
     <View style={styles.item}>
       <Text numberOfLines={1} style={styles.title} onPress={() => {
         // 显示弹窗
-        navigation.navigate('Writting')
-    }}>{title}</Text>
+        navigation.navigate('Reading')
+      }}>{title}</Text>
       <Text style={styles.date}>{date}</Text>
       <Text numberOfLines={1} style={styles.contents}>{content}</Text>
     </View>
