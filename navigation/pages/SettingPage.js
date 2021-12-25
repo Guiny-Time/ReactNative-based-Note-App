@@ -3,12 +3,10 @@ import React, {useState} from 'react';
 import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Alert, DeviceEventEmitter, Vibration} from 'react-native';
 
 export default function SettingPage({navigation}){
-    const [window, setWindow] = useState(false);
-    const [flag, setFlag] = useState(true);
     const [date, setDate] = useState("");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
-    const [token, setToken] = useState("");
+    const [currentToken, setToken] = useState("");
     const createTime = new Date();
     // The JSON used to store into Async storage
     let note_object = {
@@ -26,20 +24,21 @@ export default function SettingPage({navigation}){
         );
     }
 
-    if(window){
-        setDate('!')
+
+    if(date == ''){
         try {
             AsyncStorage.getItem('@storage_Note')
             .then((token)=>{
-                console.log(token[6])
                 AsyncStorage.getItem(token)
                 .then((value)=>{
                     const jsonValue = JSON.parse(value);
-                    console.log(jsonValue)
-                    setToken(token)
-                    setTitle(jsonValue.title)
-                    setContent(jsonValue.content)
-                    setDate(jsonValue.date)
+                    console.log("呵呵，想不到吧"+jsonValue)
+                    if(token!=currentToken){
+                        setToken(token)
+                        setTitle(jsonValue.title)
+                        setContent(jsonValue.content)
+                        setDate(jsonValue.date)
+                    }
                 })
             })
                 // 
@@ -48,7 +47,7 @@ export default function SettingPage({navigation}){
         }
         return (
             <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor:'#EEF2F6'}}>
-                <ReadID _setTitle={setTitle} _setContent={setContent} _setDate={setDate} _setToken={setToken} />
+                
                 <Text
                     onPress={()=>navigation.navigate('All Notes')}
                     style={styles.texts}>Hey! It seems that nothing in this page...?</Text>
@@ -63,20 +62,22 @@ export default function SettingPage({navigation}){
     }else{
         AsyncStorage.getItem('@storage_Note')
             .then((token)=>{
-                console.log(token[6])
                 AsyncStorage.getItem(token)
                 .then((value)=>{
                     const jsonValue = JSON.parse(value);
-                    console.log(jsonValue)
-                    setToken(token)
-                    setTitle(jsonValue.title)
-                    setContent(jsonValue.content)
-                    setDate(jsonValue.date)
+                    console.log("想不到吧*2 " + jsonValue)
+                    if(token!=currentToken){
+                        setToken(token)
+                        setTitle(jsonValue.title)
+                        setContent(jsonValue.content)
+                        setDate(jsonValue.date)
+                    }
+                    
                 })
             })
         return (
             <View style={{flex: 1, textAlign:'left', marginLeft:20, backgroundColor:'#EEF2F6'}}>
-            <ReadID _setTitle={setTitle} _setContent={setContent} _setDate={setDate} _setToken={setToken} />
+            
             <TouchableOpacity 
                 onPress={ () => {
                     // 提交日志
@@ -84,7 +85,7 @@ export default function SettingPage({navigation}){
                         alert("Oops. You are missing to write something. Maybe title?")
                     }else{
                         // 更新该token下的内容
-                        setJSONData(token, note_object)
+                        setJSONData(currentToken, note_object)
                         navigation.navigate('All Notes')
                     }}}
                 style={styles.buttonRight}>
@@ -96,7 +97,7 @@ export default function SettingPage({navigation}){
 
             <TouchableOpacity 
                 onPress={()=>{
-                    navigation.navigate('All Notes')}}
+                    navigation.navigate('All Notes',{callBack:()=>{setDate('')}})}}
                 style={styles.buttonLeft}>
                 <Image
                     style={{height:40, width:40, marginBottom:10, marginTop:25, right:0}}
@@ -124,30 +125,6 @@ export default function SettingPage({navigation}){
         );
     }
     
-}
-
-const ReadID = ({_setTitle, _setContent, _setDate, _setToken})=>{
-    try {
-        AsyncStorage.getItem('@storage_Note')
-        .then((token)=>{
-            console.log(token[6])
-            AsyncStorage.getItem(token)
-            .then((value)=>{
-                const jsonValue = JSON.parse(value);
-                console.log(jsonValue)
-                _setToken(token)
-                _setTitle(jsonValue.title)
-                _setContent(jsonValue.content)
-                _setDate(jsonValue.date)
-            })
-        })
-            // 
-    } catch(e) {
-        console.log(e.message)
-    }
-    return(
-        <View></View>
-    )
 }
 
 // 储存JSON格式数据

@@ -34,7 +34,7 @@ export default function HomePage({navigation}){
     }
     // compare function
     function localCompare(a, b){
-      return a.replace('/')>b.replace('/')
+      return a.replace('/')<b.replace('/')
     }
     
     const renderItem = ({ item }) => (
