@@ -95,7 +95,8 @@ const ImportData = ({_SetKeys, flag, _SetFlag, _SetCount})=>{
     .then((keys)=> AsyncStorage.multiGet(keys)
       .then((data) => {
         for(var i = 0; i < data.length; i++){
-          if(data[i][0].length == 4){
+          // is token and the value is not null
+          if(data[i][0].length == 4 && data[i][1].title!=''){
             const jsonValue = JSON.parse(data[i][1]);
             // console.log(data[i][0])
             dataBack = {'id':data[i][0],'title':jsonValue.title, 'content':jsonValue.content, 'date':jsonValue.date}

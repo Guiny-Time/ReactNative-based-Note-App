@@ -121,6 +121,28 @@ export default function SettingPage({navigation}){
                 placeholder='Write anything you like.'
                 value={content}>
             </TextInput>
+            <TouchableOpacity 
+                onPress={()=>{
+                    // 根据token删除掉这篇文章
+                    AsyncStorage.removeItem(currentToken, function (error) {
+                        if (error) {
+                            alert('删除失败')
+                        }else {
+                            alert('delete successfully.')
+                        }
+                    })
+                    setToken('')
+                    setTitle('')
+                    setContent('')
+                    setDate('')
+   
+                    navigation.navigate('All Notes')}}
+                style={styles.buttonbuttom}>
+                <Image
+                    style={{height:40, width:40, marginBottom:10, marginTop:25, right:0}}
+                    underlayColor='white'
+                    source={require('../../assets/delete.png')}/>
+            </TouchableOpacity>
         </View>
         );
     }
@@ -157,8 +179,8 @@ const styles = StyleSheet.create({
         borderColor: '#777',
         padding: 8,
         margin: 15,
-        width: 350,
-        height: 450,
+        width: '88%',
+        height: '65%',
         fontSize:20, 
         fontWeight:'bold',
         /*use for fuzzy board of text-input*/
@@ -180,6 +202,11 @@ const styles = StyleSheet.create({
         height: 60,                                            
         position: 'absolute',                                          
         top: 10,
+    },
+    buttonbuttom: {
+        position: 'absolute',
+        bottom:2,
+        left: '42.5%'
     },
     texts: {
         fontSize:20, 
