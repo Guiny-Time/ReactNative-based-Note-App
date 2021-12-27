@@ -1,11 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState} from 'react';
-import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Alert, DeviceEventEmitter, Vibration} from 'react-native';
+import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity } from 'react-native';
 
-export default function SettingPage({navigation}){
+export default function ReadingPage({navigation}){
+    // basic props of note object
     const [date, setDate] = useState("");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+    // token from home
     const [currentToken, setToken] = useState("");
     const createTime = new Date();
     // The JSON used to store into Async storage
@@ -24,29 +26,29 @@ export default function SettingPage({navigation}){
         );
     }
 
-
+    // if nothing here
     if(date == ''){
         try {
             AsyncStorage.getItem('@storage_Note')
             .then((token)=>{
                 AsyncStorage.getItem(token)
                 .then((value)=>{
-                    const jsonValue = JSON.parse(value);
-                    console.log("呵呵，想不到吧"+jsonValue)
-                    if(token!=currentToken){
-                        setToken(token)
-                        setTitle(jsonValue.title)
-                        setContent(jsonValue.content)
-                        setDate(jsonValue.date)
+                    if(value != null){
+                        const jsonValue = JSON.parse(value);
+                        if(token!=currentToken){
+                            setToken(token)
+                            setTitle(jsonValue.title)
+                            setContent(jsonValue.content)
+                            setDate(jsonValue.date)
+                        }
                     }
                 })
             })
-                // 
         } catch(e) {
             console.log(e.message)
         }
         return (
-            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor:'#EEF2F6'}}>
+            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor:'#9dabab'}}>
                 
                 <Text
                     onPress={()=>navigation.navigate('All Notes')}
@@ -60,12 +62,12 @@ export default function SettingPage({navigation}){
             </View>
         );
     }else{
+        // if has things
         AsyncStorage.getItem('@storage_Note')
             .then((token)=>{
                 AsyncStorage.getItem(token)
                 .then((value)=>{
                     const jsonValue = JSON.parse(value);
-                    console.log("想不到吧*2 " + jsonValue)
                     if(token!=currentToken){
                         setToken(token)
                         setTitle(jsonValue.title)
@@ -76,15 +78,15 @@ export default function SettingPage({navigation}){
                 })
             })
         return (
-            <View style={{flex: 1, textAlign:'left', marginLeft:20, backgroundColor:'#EEF2F6'}}>
+            <View style={{flex: 1, textAlign:'left', paddingLeft:20, backgroundColor:'#d9c6bf'}}>
             
             <TouchableOpacity 
                 onPress={ () => {
-                    // 提交日志
-                    if(note_object.title == '' || note_object.content == '' || note_object.date == ''){
+                    // submit again
+                    if(note_object.title.trim() == '' || note_object.content.trim() == '' || note_object.date == ''){
                         alert("Oops. You are missing to write something. Maybe title?")
                     }else{
-                        // 更新该token下的内容
+                        // update the note object
                         setJSONData(currentToken, note_object)
                         navigation.navigate('All Notes')
                     }}}
@@ -123,10 +125,10 @@ export default function SettingPage({navigation}){
             </TextInput>
             <TouchableOpacity 
                 onPress={()=>{
-                    // 根据token删除掉这篇文章
+                    // delete the note
                     AsyncStorage.removeItem(currentToken, function (error) {
                         if (error) {
-                            alert('删除失败')
+                            alert('some thing wrong.')
                         }else {
                             alert('delete successfully.')
                         }
@@ -149,45 +151,42 @@ export default function SettingPage({navigation}){
     
 }
 
-// 储存JSON格式数据
+// this function is same as writting page's
 const setJSONData = async (key, value) => {
-    // 这里的key作为本日记的token
     console.log(JSON.stringify(value))
     if(key == undefined){
-        // 笔记初始id未定义
-        console.log('You do not have note token now: ' + key)
+        console.log('You do not have note token now.')
     }else if(value == ''){
-        // 没写东西
         alert('You did not write anything yet.')
     }else{
-        // 写入存储
         try {
-            // value是一个JSON，包含了：最后修改时间、标题、内容文本
             AsyncStorage.setItem(key, JSON.stringify(value));
-            alert('Submit successfully! Note token: ' + key)
+            alert('Submit successfully!')
         } catch (e) {
             console.log(e.message)
         }
     }
   }
-const styles = StyleSheet.create({
+
+  const styles = StyleSheet.create({
     input:{
-        backgroundColor:'#fff',
+        backgroundColor:'#faf3ed',
         textAlignVertical: 'top',
         textAlign:'left',
         borderWidth: 1,
-        borderColor: '#777',
-        padding: 8,
+        borderRadius: 25,
+        borderColor: '#faf3ed',
+        padding: 15,
         margin: 15,
-        width: '88%',
+        width: 350,
         height: '65%',
         fontSize:20, 
         fontWeight:'bold',
         /*use for fuzzy board of text-input*/
         elevation:4,
-        shadowColor:'grey',
+        shadowColor:'#8a9f9a',
         shadowOffset:{width:100,height:25},
-        shadowOpacity: 1,
+        shadowOpacity: 0.5,
         shadowRadius: 5,
     },
     buttonRight:{
@@ -202,13 +201,15 @@ const styles = StyleSheet.create({
         height: 60,                                            
         position: 'absolute',                                          
         top: 10,
+        left: 10
     },
     buttonbuttom: {
         position: 'absolute',
         bottom:2,
-        left: '42.5%'
+        left: '47%'
     },
     texts: {
+        color:'#fff',
         fontSize:20, 
         marginLeft:50, 
         marginRight:50,

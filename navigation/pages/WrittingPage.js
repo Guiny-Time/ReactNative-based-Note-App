@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity, Alert, DeviceEventEmitter, Vibration} from 'react-native';
+import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // page for writting note
@@ -57,27 +57,29 @@ export default function WrittingPage({navigation}) {
     }
 
     return (
-        <View style={{flex: 1, textAlign:'left', marginLeft:20, backgroundColor:'#EEF2F6'}}>
+        <View style={{flex: 1, textAlign:'left', paddingLeft:20, backgroundColor:'#9dabab'}}>
             <TouchableOpacity 
                 onPress={ () => {
-                    // 提交日志
-                    if(note_object.title == '' || note_object.content == '' || note_object.date == ''){
+                    // submit and store the note
+                    if(note_object.title.trim() == '' || note_object.content.trim() == '' || note_object.date == ''){
                         alert("Oops. You are missing to write something. Maybe title?")
                     }else{
-                        // 随机生成4位token
+                        // randomly generate token
                         let token = randomToken(4)
-                        // 设置笔记token
+                        // set the token
                         setID(id, token)
-                        // 设置token对应的内容
+                        // use token as key to store note object
                         setJSONData(token, note_object)
+                        // after submit, clear the type-things
                         ClearEverything()
+                        // back to the home
                         navigation.navigate('All Notes',{callBack:()=>{setContent("")}})
                     }}}
                 style={styles.buttonRight}>
                 <Image
                     style={{height:50, width:50, marginBottom:10, marginTop:25}}
                     underlayColor='white'
-                    source={require('../../assets/ok.png')}/>
+                    source={require('../../assets/对勾.png')}/>
             </TouchableOpacity>
 
             <TouchableOpacity 
@@ -88,7 +90,7 @@ export default function WrittingPage({navigation}) {
                 <Image
                     style={{height:40, width:40, marginBottom:10, marginTop:25, right:0}}
                     underlayColor='white'
-                    source={require('../../assets/Back.png')}/>
+                    source={require('../../assets/返回.png')}/>
             </TouchableOpacity>
 
             <TextInput
@@ -111,65 +113,61 @@ export default function WrittingPage({navigation}) {
     );
 }
 
-// 储存ID
+// store the id(created time) and token
 const setID = async (key, value) => {
     try {
         await AsyncStorage.setItem(key, value)
-        console.log('写入数据库成功')
-      } catch (e) {
+        console.log('token written successfully')
+    } catch (e) {
         console.log(e.message)
-      }
-  }
+    }
+}
 
-// 储存JSON格式数据
+// store the token and note object
 const setJSONData = async (key, value) => {
-    // 这里的key作为本日记的token
-    console.log(JSON.stringify(value))
     if(key == undefined){
-        // 笔记初始id未定义
-        console.log('You do not have note token now: ' + key)
+        console.log('You do not have note token now.')
     }else if(value == ''){
-        // 没写东西
+        // write nothing
         alert('You did not write anything yet.')
     }else{
-        // 写入存储
         try {
-            // value是一个JSON，包含了：最后修改时间、标题、内容文本
             AsyncStorage.setItem(key, JSON.stringify(value));
-            alert('Submit successfully! Note token: ' + key)
+            alert('Submit successfully!')
         } catch (e) {
             console.log(e.message)
         }
     }
-  }
+}
 
   // css part
 const styles = StyleSheet.create({
     inputTitle:{
         fontSize:26, 
         fontWeight:'bold', 
-        color:'grey', 
+        color:'#E7E7E7', 
         textAlign:'left', 
         marginTop:80, 
         marginLeft:10
     },
     input:{
-        backgroundColor:'#fff',
+        backgroundColor:'#faf3ed',
         textAlignVertical: 'top',
         textAlign:'left',
         borderWidth: 1,
-        borderColor: '#777',
-        padding: 8,
+        borderRadius: 25,
+        borderColor: '#faf3ed',
+        padding: 15,
         margin: 15,
         width: 350,
-        height: 450,
+        height: '73%',
         fontSize:20, 
         fontWeight:'bold',
         /*use for fuzzy board of text-input*/
         elevation:4,
-        shadowColor:'grey',
+        shadowColor:'#d9c6bf',
         shadowOffset:{width:100,height:25},
-        shadowOpacity: 1,
+        shadowOpacity: 0.5,
         shadowRadius: 5,
     },
     buttonRight:{
@@ -184,5 +182,6 @@ const styles = StyleSheet.create({
         height: 60,                                            
         position: 'absolute',                                          
         top: 10,
+        left: 10
     }
 });
