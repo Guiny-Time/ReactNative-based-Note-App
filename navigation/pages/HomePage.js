@@ -67,17 +67,17 @@ const Item = ({ id, title, content, date, navigation }) => {
       <Text numberOfLines={1} style={styles.title} onPress={() => {
         // store current note's note object(using for reading)
         storeData({id}.id)
-        navigation.navigate('Reading',{callBack:()=>{setFlag(true)}})
+        navigation.navigate('Reading')
       }}>{title}</Text>
       <Text style={styles.date} onPress={() => {
         // store current note's note object(using for reading)
         storeData({id}.id)
-        navigation.navigate('Reading',{callBack:()=>{setFlag(true)}})
+        navigation.navigate('Reading')
       }}>{date}</Text>
       <Text numberOfLines={1} style={styles.contents} onPress={() => {
         // store current note's note object(using for reading)
         storeData({id}.id)
-        navigation.navigate('Reading',{callBack:()=>{setFlag(true)}})
+        navigation.navigate('Reading')
       }}>{content}</Text>
     </View>
   );

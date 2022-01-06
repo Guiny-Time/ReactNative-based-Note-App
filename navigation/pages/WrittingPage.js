@@ -73,7 +73,7 @@ export default function WrittingPage({navigation}) {
                         // after submit, clear the type-things
                         ClearEverything()
                         // back to the home
-                        navigation.navigate('All Notes',{callBack:()=>{setContent("")}})
+                        navigation.navigate('All Notes')
                     }}}
                 style={styles.buttonRight}>
                 <Image
